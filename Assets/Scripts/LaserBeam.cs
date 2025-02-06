@@ -1,12 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
 public class LaserBeam : MonoBehaviour
 {
     public LayerMask LayerMask;
+    public LayerMask ErrorMask;
+    public LayerMask FinishMask;
+    public GameObject Screen;
+    public Material Green;
     public float DefaultLength = 5000;
     public int NumberOfReflection = 10;
     private LineRenderer _lineRenderer;
@@ -47,26 +52,36 @@ public class LaserBeam : MonoBehaviour
             }
             else
             {
-                // _lineRenderer.SetPosition(1, transform.position + (transform.forward * DefaultLength));
-                _lineRenderer.positionCount += 1; // Increase count before setting position
-                lastPosition += _ray.direction * DefaultLength;
-                _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, lastPosition);
-                break;
+                if (Physics.Raycast(_ray.origin, _ray.direction, out _raycastHit, DefaultLength, ErrorMask))
+                {
+                    _lineRenderer.positionCount += 1; // Increase count before setting position
+                    lastPosition += _ray.direction * DefaultLength;
+                    _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, lastPosition);
+                    ResetPuzzle();
+                }
+                else
+                {
+                    if (Physics.Raycast(_ray.origin, _ray.direction, out _raycastHit, DefaultLength, FinishMask))
+                {
+                    _lineRenderer.positionCount += 1; // Increase count before setting position
+                    lastPosition += _ray.direction * DefaultLength;
+                    _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, lastPosition);
+                    ResetPuzzle();
+                }
+                else
+                {
+                    // _lineRenderer.SetPosition(1, transform.position + (transform.forward * DefaultLength));
+                    _lineRenderer.positionCount += 1; // Increase count before setting position
+                    lastPosition += _ray.direction * DefaultLength;
+                    _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, lastPosition);
+                    break;
+                }
+                }
             }
         }
     }
-
-    void NormalLaser()
+    private void ResetPuzzle()
     {
-        _lineRenderer.SetPosition(0, transform.position);
 
-        if (Physics.Raycast(transform.position, transform.forward, out _raycastHit, DefaultLength, LayerMask))
-        {
-            _lineRenderer.SetPosition(1, _raycastHit.point);
-        }
-        else
-        {
-            _lineRenderer.SetPosition(1, transform.position + (transform.forward * DefaultLength));
-        }
     }
 }
