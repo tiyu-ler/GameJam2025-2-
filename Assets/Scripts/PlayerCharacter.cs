@@ -15,35 +15,37 @@ public class PlayerCharacter : MonoBehaviour
     {
         _inSettingsMouseSpeed = PlayerPrefs.GetFloat("MouseSpeed", 0.5f);
         controller = GetComponent<CharacterController>();
-        LockCursor(true);
+        // LockCursor(true);
+        Cursor.visible = false;
+		Cursor.lockState = CursorLockMode.Locked;
         _cameraRotation = camera.transform.localRotation;
     }
 
-
     void Update()
     {
-        float _moveX = Input.GetAxis("Horizontal") * _inSettingsMouseSpeed * RotationSpeed;
-        float _moveY = Input.GetAxis("Vertical") * _inSettingsMouseSpeed * RotationSpeed;
+        Vector3 _moveX = Input.GetAxis("Horizontal") * Vector3.right * MovementSpeed * Time.deltaTime;
+        Vector3 _moveY = Input.GetAxis("Vertical") * Vector3.forward * MovementSpeed * Time.deltaTime;
 
-        Vector3 _move = new Vector3(_moveX, 0, _moveY);
-        controller.Move(_move * Time.deltaTime * MovementSpeed);
+        Vector3 _move = transform.TransformDirection(_moveX+_moveY);
+        controller.Move(_move);
 
-        // float _rotateHorizontal = Input.GetAxis("Mouse X");
-	    // float _rotateVertical = Input.GetAxis("Mouse Y");
+        float _rotateHorizontal = Input.GetAxis("Mouse X") * _inSettingsMouseSpeed * RotationSpeed;
+	    float _rotateVertical = Input.GetAxis("Mouse Y") * _inSettingsMouseSpeed * RotationSpeed;
 
-        // camera.transform.Rotate(Vector3.up * _rotateHorizontal);
-        // camera.transform.localRotation = Quaternion.Euler(_rotateVertical, 0f, 0f);
+        transform.rotation *= Quaternion.Euler (0f, _rotateHorizontal, 0f);
+		_cameraRotation *= Quaternion.Euler (-_rotateVertical, 0f, 0f);
+        camera.transform.localRotation = _cameraRotation;
     }
 
-    private void LockCursor(bool isLocked)
-	{
-		if (isLocked) 
-		{
-			Cursor.visible = false;
-			Cursor.lockState = CursorLockMode.Locked;
-		} else {
-			Cursor.visible = true;
-			Cursor.lockState = CursorLockMode.None;
-		}
-	}
+    // private void LockCursor(bool isLocked)
+	// {
+	// 	if (isLocked) 
+	// 	{
+	// 		Cursor.visible = false;
+	// 		Cursor.lockState = CursorLockMode.Locked;
+	// 	} else {
+	// 		Cursor.visible = true;
+	// 		Cursor.lockState = CursorLockMode.None;
+	// 	}
+	// }
 }
