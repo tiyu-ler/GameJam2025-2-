@@ -7,7 +7,7 @@ public class PlayerCharacter : MonoBehaviour
 {
     public float MovementSpeed;
     public float RotationSpeed;
-    public Camera camera;
+    public Camera MainCamera;
     private float _inSettingsMouseSpeed;
     private CharacterController controller;
     private Quaternion _cameraRotation;
@@ -18,7 +18,7 @@ public class PlayerCharacter : MonoBehaviour
         // LockCursor(true);
         Cursor.visible = false;
 		Cursor.lockState = CursorLockMode.Locked;
-        _cameraRotation = camera.transform.localRotation;
+        _cameraRotation = MainCamera.transform.localRotation;
     }
 
     void Update()
@@ -34,6 +34,6 @@ public class PlayerCharacter : MonoBehaviour
 
         transform.rotation *= Quaternion.Euler (0f, _rotateHorizontal, 0f);
 		_cameraRotation *= Quaternion.Euler (-_rotateVertical, 0f, 0f);
-        camera.transform.localRotation = _cameraRotation;
+        MainCamera.transform.localRotation = _cameraRotation;
     }
 }
