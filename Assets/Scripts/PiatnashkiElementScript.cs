@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PiatnashkiElementScript : MonoBehaviour
 {
@@ -12,16 +13,17 @@ public class PiatnashkiElementScript : MonoBehaviour
 
     public void OutlineEnable()
     {
-
+        outline.SetActive(false);
     }
     public void OutlineDisable()
     {
-
+        outline.SetActive(true);
     }
 
     void Start()
     {
         canBeRotated = true;
+        OutlineDisable();
     }
     public void RotateObject()
     {
