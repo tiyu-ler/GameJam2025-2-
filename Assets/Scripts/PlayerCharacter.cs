@@ -7,7 +7,7 @@ public class PlayerCharacter : MonoBehaviour
 {
     public float MovementSpeed;
     public float RotationSpeed;
-    public Camera camera;
+    public Camera MainCamera;
 
     private float _inSettingsMouseSpeed;
     private CharacterController controller;
@@ -19,7 +19,7 @@ public class PlayerCharacter : MonoBehaviour
         // LockCursor(true);
         Cursor.visible = false;
 		Cursor.lockState = CursorLockMode.Locked;
-        _cameraRotation = camera.transform.localRotation;
+        _cameraRotation = MainCamera.transform.localRotation;
     }
 
     void Update()
@@ -31,10 +31,10 @@ public class PlayerCharacter : MonoBehaviour
         controller.Move(_move);
 
         float _rotateHorizontal = Input.GetAxis("Mouse X") * _inSettingsMouseSpeed * RotationSpeed;
-	    float _rotateVertical = Math.Clamp(Input.GetAxis("Mouse Y") * _inSettingsMouseSpeed * RotationSpeed,-89,89);
-
+	    float _rotateVertical = Mathf.Clamp(Input.GetAxis("Mouse Y") * _inSettingsMouseSpeed * RotationSpeed,-85,85);
+        // Debug.Log(_rotateVertical);
         transform.rotation *= Quaternion.Euler (0f, _rotateHorizontal, 0f);
 		_cameraRotation *= Quaternion.Euler (-_rotateVertical, 0f, 0f);
-        camera.transform.localRotation = _cameraRotation;
+        MainCamera.transform.localRotation = _cameraRotation;
     }
 }
