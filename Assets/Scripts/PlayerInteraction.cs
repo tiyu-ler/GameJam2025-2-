@@ -11,10 +11,10 @@ public class PlayerInteraction : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
+        // if (Input.GetKeyDown(KeyCode.E))
+        // {
             TryInteract();
-        }
+        // }
     }
 
     void TryInteract()
@@ -30,7 +30,11 @@ public class PlayerInteraction : MonoBehaviour
                     PiatnashkiElementScript elementScript = hit.collider.GetComponent<PiatnashkiElementScript>();
                     if (elementScript != null)
                     {
-                        elementScript.RotateObject();
+                        elementScript.OutlineEnable();
+                        if (Input.GetKeyDown(KeyCode.E))
+                        {
+                            elementScript.RotateObject();
+                        }
                     }
                 } catch {Debug.Log("Error");}
                 

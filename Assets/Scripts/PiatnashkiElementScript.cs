@@ -8,6 +8,16 @@ public class PiatnashkiElementScript : MonoBehaviour
     public List<int> RightPositions = new List<int>();
     public PiatnashkiScript PiatnashkiScript;
     public bool canBeRotated;
+    public GameObject outline;
+
+    public void OutlineEnable()
+    {
+
+    }
+    public void OutlineDisable()
+    {
+
+    }
 
     void Start()
     {
